@@ -5,6 +5,11 @@ public class CreateProduct : ProductBase
    
 }
 
+public class CreateCategory
+{
+    
+}
+
 
 
 
