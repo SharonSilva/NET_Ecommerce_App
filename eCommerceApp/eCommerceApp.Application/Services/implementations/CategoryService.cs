@@ -1,10 +1,13 @@
+using AutoMapper;
 using eCommerceApp.Application.DTOs;
 using eCommerceApp.Application.DTOs.Category;
 using eCommerceApp.Application.Services.Interfaces;
+using eCommerceApp.Domain.Entities;
+using eCommerceApp.Domain.Interfaces;
 
 namespace eCommerceApp.Application.Services.implementations;
 
-public class CategoryService :ICategoryService
+public class CategoryService(IGeneric<Category> categoryInterface, IMapper mapper) : ICategoryService
 {
     public Task<IEnumerable<GetCategory>> GetAllAsync()
     {
@@ -16,9 +19,13 @@ public class CategoryService :ICategoryService
         throw new NotImplementedException();
     }
 
-    public Task<ServiceResponse> AddAsync(CreateCategory category)
+    public async Task<ServiceResponse> AddAsync(CreateCategory category)
     {
-        throw new NotImplementedException();
+        var mappedData = mapper.Map<Category>(category);
+        int result = await categoryInterface.AddAsync(mappedData);
+        return result > 0
+            ? new ServiceResponse(true, "Category added")
+            : new ServiceResponse(false, "Category failed to be added");
     }
 
     public Task<ServiceResponse> UpdateAsync(UpdateCategory category)
@@ -26,8 +33,10 @@ public class CategoryService :ICategoryService
         throw new NotImplementedException();
     }
 
-    public Task<ServiceResponse> DeleteAsync(Guid id)
+    public async Task<ServiceResponse> DeleteAsync(Guid id)
     {
-        throw new NotImplementedException();
+        int result = await categoryInterface.DeleteAsync(id);
+        return result > 0 ? new ServiceResponse(true, "Category deleted") :
+            new ServiceResponse(false, "Category deleted");
     }
 }

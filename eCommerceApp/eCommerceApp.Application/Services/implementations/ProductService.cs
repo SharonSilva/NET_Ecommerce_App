@@ -30,8 +30,8 @@ public class ProductService(IGeneric<Product> productInterface, IMapper mapper) 
         var mappedData = mapper.Map<Product>(product);
         int result = await productInterface.AddAsync(mappedData);
         return result > 0
-            ? new ServiceResponse(true, "Product deleted")
-            : new ServiceResponse(false, "Product failed to be deleted");
+            ? new ServiceResponse(true, "Product added")
+            : new ServiceResponse(false, "Product failed to be added");
     }
 
     public async Task<ServiceResponse> UpdateAsync(UpdateProduct product)
