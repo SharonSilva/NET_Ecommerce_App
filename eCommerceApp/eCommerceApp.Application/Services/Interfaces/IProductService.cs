@@ -1,7 +1,5 @@
 using eCommerceApp.Application.DTOs;
-using eCommerceApp.Application.DTOs.Category;
 using eCommerceApp.Application.DTOs.Product;
-using CreateCategory = eCommerceApp.Application.DTOs.Product.CreateCategory;
 
 namespace eCommerceApp.Application.Services.Interfaces;
 

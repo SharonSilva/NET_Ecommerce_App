@@ -25,7 +25,8 @@ public class ProductController(IProductService productService) : ControllerBase
     public async Task<IActionResult> Add(CreateProduct product)
     {
         var result = await productService.AddAsync(product);
-        return result.Success ? Ok(result) : BadRequest(result);
+        return result.Success ? Ok(result) : BadRequest(result); 
+        
     }
 
     [HttpPut("update")]

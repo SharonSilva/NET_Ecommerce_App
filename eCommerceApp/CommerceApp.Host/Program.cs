@@ -1,7 +1,11 @@
+using AutoMapper;
 using eCommerceApp.Application.DependencyInjection;
+using eCommerceApp.Application.Mapping;
 using eCommerceApp.Infrastructure.Data;
 using eCommerceApp.Infrastructure.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 

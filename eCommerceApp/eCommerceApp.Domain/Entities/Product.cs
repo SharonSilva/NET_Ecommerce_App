@@ -15,7 +15,7 @@ public class Product
     [DataType(DataType.Currency)]
     public decimal Price { get; set; }
     [Required]
-    public string? Base64Image { get; set; }
+    public string? Base64Image { get; set; } 
     public int Quantity { get; set; }
     public Category? Category { get; set; }
     public Guid CategoryId { get; set; }
