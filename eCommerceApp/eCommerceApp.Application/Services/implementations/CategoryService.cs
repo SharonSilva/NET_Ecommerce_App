@@ -9,14 +9,20 @@ namespace eCommerceApp.Application.Services.implementations;
 
 public class CategoryService(IGeneric<Category> categoryInterface, IMapper mapper) : ICategoryService
 {
-    public Task<IEnumerable<GetCategory>> GetAllAsync()
+    public async Task<IEnumerable<GetCategory>> GetAllAsync()
     {
-        throw new NotImplementedException();
+        var rawData = await categoryInterface.GetAllAsync();
+        if (!rawData.Any()) return [];
+
+        return mapper.Map<IEnumerable<GetCategory>>(rawData);
     }
 
-    public Task<GetCategory> GetByIdAsync(Guid id)
+    public async Task<GetCategory> GetByIdAsync(Guid id)
     {
-        throw new NotImplementedException();
+        var rawData = await categoryInterface.GetByIdAsync(id);
+        if (rawData == null) return new GetCategory();
+        
+        return mapper.Map<GetCategory>(rawData);
     }
 
     public async Task<ServiceResponse> AddAsync(CreateCategory category)
@@ -28,15 +34,18 @@ public class CategoryService(IGeneric<Category> categoryInterface, IMapper mappe
             : new ServiceResponse(false, "Category failed to be added");
     }
 
-    public Task<ServiceResponse> UpdateAsync(UpdateCategory category)
+    public async Task<ServiceResponse> UpdateAsync(UpdateCategory category)
     {
-        throw new NotImplementedException();
+        var mappedData = mapper.Map<Category>(category);
+        int result = await categoryInterface.UpdateAsync(mappedData);
+        return result > 0 ? new ServiceResponse(true, "Category updated!"):
+            new ServiceResponse(false, "Category failed to be updated");
     }
 
     public async Task<ServiceResponse> DeleteAsync(Guid id)
     {
         int result = await categoryInterface.DeleteAsync(id);
         return result > 0 ? new ServiceResponse(true, "Category deleted") :
-            new ServiceResponse(false, "Category deleted");
+            new ServiceResponse(false, "Category not found or fail to delete");
     }
 }

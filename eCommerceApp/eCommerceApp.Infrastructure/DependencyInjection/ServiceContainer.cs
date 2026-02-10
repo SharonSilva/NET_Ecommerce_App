@@ -13,7 +13,7 @@ public static class ServiceContainer
     public static IServiceCollection AddInfrastructureService
         (this IServiceCollection services, IConfiguration config)
     {
-        string connectionString = "Default";
+        string connectionString = "DefaultConnection";
         services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(config.GetConnectionString(connectionString),
                     sqlOptions =>
