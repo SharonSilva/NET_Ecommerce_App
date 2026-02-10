@@ -30,6 +30,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseInfrastructureService();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

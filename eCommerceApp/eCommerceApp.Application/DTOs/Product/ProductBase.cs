@@ -5,8 +5,10 @@ namespace eCommerceApp.Application.DTOs.Product;
 
 public class ProductBase
 {
-    [Required] public string? Name { get; set; } 
-    [Required] public string? Description { get; set; } 
+    [Required] 
+    public string? Name { get; set; } 
+    [Required] 
+    public string? Description { get; set; } 
     [Required]
     [DataType(DataType.Currency)]
     public decimal Price { get; set; }
