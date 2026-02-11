@@ -1,5 +1,6 @@
 using eCommerceApp.Application.Services.Interfaces.Logging;
 using eCommerceApp.Domain.Entities;
+using eCommerceApp.Domain.Entities.Identity;
 using eCommerceApp.Domain.Interfaces;
 using eCommerceApp.Infrastructure.Data;
 using eCommerceApp.Infrastructure.MiddleWare;
@@ -7,9 +8,11 @@ using eCommerceApp.Infrastructure.Repositories;
 using eCommerceApp.Infrastructure.Services;
 using EntityFramework.Exceptions.SqlServer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace eCommerceApp.Infrastructure.DependencyInjection;
 
@@ -30,6 +33,19 @@ public static class ServiceContainer
         services.AddScoped<IGeneric<Product>, GenericRepository<Product>>();
         services.AddScoped<IGeneric<Category>, GenericRepository<Category>>();
         services.AddScoped(typeof(IAppLogger<>), typeof(SerilogLoggerAdapter<>));
+        services.AddDefaultIdentity<AppUser>(options =>
+            {
+                options.SignIn.RequireConfirmedEmail = true;
+
+                options.Password.RequireDigit = true;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequiredLength = 8;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireUppercase = true;
+            })
+            .AddRoles<IdentityRole>()
+            .AddEntityFrameworkStores<AppDbContext>();
+
         return services;
     }
 
