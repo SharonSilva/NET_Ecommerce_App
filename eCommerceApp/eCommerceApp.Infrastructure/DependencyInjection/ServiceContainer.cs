@@ -1,3 +1,4 @@
+using System.Text;
 using eCommerceApp.Application.Services.Interfaces.Logging;
 using eCommerceApp.Domain.Entities;
 using eCommerceApp.Domain.Entities.Identity;
@@ -7,12 +8,14 @@ using eCommerceApp.Infrastructure.MiddleWare;
 using eCommerceApp.Infrastructure.Repositories;
 using eCommerceApp.Infrastructure.Services;
 using EntityFramework.Exceptions.SqlServer;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
 namespace eCommerceApp.Infrastructure.DependencyInjection;
 
@@ -45,6 +48,28 @@ public static class ServiceContainer
             })
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<AppDbContext>();
+
+        services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        }).AddJwtBearer(options =>
+        {
+            options.SaveToken = true;
+            options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+            {
+                ValidateAudience = true,
+                ValidateIssuer = true,
+                ValidateLifetime = true,
+                RequireExpirationTime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = config["Jwt:Issuer"],
+                ValidAudience = config["Jwt:Audience"],
+                ClockSkew = TimeSpan.Zero,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]!))
+            };
+        });
 
         return services;
     }
