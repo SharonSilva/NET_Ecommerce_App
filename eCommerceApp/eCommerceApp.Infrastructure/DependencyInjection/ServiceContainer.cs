@@ -3,9 +3,11 @@ using eCommerceApp.Application.Services.Interfaces.Logging;
 using eCommerceApp.Domain.Entities;
 using eCommerceApp.Domain.Entities.Identity;
 using eCommerceApp.Domain.Interfaces;
+using eCommerceApp.Domain.Interfaces.Authentication;
 using eCommerceApp.Infrastructure.Data;
 using eCommerceApp.Infrastructure.MiddleWare;
 using eCommerceApp.Infrastructure.Repositories;
+using eCommerceApp.Infrastructure.Repositories.Authentication;
 using eCommerceApp.Infrastructure.Services;
 using EntityFramework.Exceptions.SqlServer;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -71,6 +73,9 @@ public static class ServiceContainer
             };
         });
 
+        services.AddScoped<IUserManagement, UserManagement>();
+        services.AddScoped<ITokenManagement, TokenManagement>();
+        services.AddScoped<IRoleManagement, RoleManagement>();
         return services;
     }
 
