@@ -1,5 +1,7 @@
 using System.Text;
 using eCommerceApp.Application.Services.Interfaces.Logging;
+using eCommerceApp.Application.Validations;
+using eCommerceApp.Application.Validations.Authentication;
 using eCommerceApp.Domain.Entities;
 using eCommerceApp.Domain.Entities.Identity;
 using eCommerceApp.Domain.Interfaces;
@@ -10,6 +12,9 @@ using eCommerceApp.Infrastructure.Repositories;
 using eCommerceApp.Infrastructure.Repositories.Authentication;
 using eCommerceApp.Infrastructure.Services;
 using EntityFramework.Exceptions.SqlServer;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -76,6 +81,11 @@ public static class ServiceContainer
         services.AddScoped<IUserManagement, UserManagement>();
         services.AddScoped<ITokenManagement, TokenManagement>();
         services.AddScoped<IRoleManagement, RoleManagement>();
+        services.AddScoped<IValidationService, ValidationService>();
+        services.AddScoped<IAuthenticationService, AuthenticationService>();
+
+        services.AddFluentValidationAutoValidation();
+        services.AddValidatorsFromAssemblyContaining<CreateUserValidator>();
         return services;
     }
 
